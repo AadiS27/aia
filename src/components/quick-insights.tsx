@@ -5,34 +5,89 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { TrendingUp, TrendingDown, AlertTriangle, Lightbulb, ArrowRight } from "lucide-react"
 
+interface MetricData {
+  value: number
+  change: number
+  trend: "up" | "down"
+  target: number
+  previousPeriod: number
+}
+
+interface CampaignData {
+  id: number
+  name: string
+  status: string
+  budget: number
+  spent: number
+  conversions: number
+  ctr: number
+  roas: number
+  impressions: number
+  clicks: number
+  startDate: string
+  endDate: string
+}
+
+interface DashboardData {
+  metrics: {
+    revenue: MetricData
+    users: MetricData
+    conversions: MetricData
+    growth: MetricData
+    impressions: MetricData
+    ctr: MetricData
+  }
+  campaigns: CampaignData[]
+}
+
 interface QuickInsightsProps {
-  data: any
+  data: DashboardData
 }
 
 export function QuickInsights({ data }: QuickInsightsProps) {
-  const insights = [
-    {
-      type: "opportunity",
-      title: "Mobile Performance Gap",
-      description: "Mobile campaigns are underperforming by 23% vs desktop",
-      impact: "High",
-      action: "Optimize mobile creatives",
-    },
-    {
-      type: "alert",
-      title: "Budget Pacing Alert",
-      description: "Summer Sale campaign spending 40% faster than planned",
-      impact: "Critical",
-      action: "Adjust daily budget",
-    },
-    {
-      type: "trend",
-      title: "Audience Shift",
-      description: "25-34 age group engagement up 45% this month",
+  // Generate insights based on actual data
+  const generateInsights = () => {
+    const insights = []
+    
+    // Check conversion rate trend
+    if (data.metrics.conversions.trend === "down") {
+      insights.push({
+        type: "warning",
+        title: "Conversion Rate Declining",
+        description: `Conversion rate dropped by ${Math.abs(data.metrics.conversions.change)}% this period`,
+        impact: "High",
+        action: "Review landing pages and user flow",
+      })
+    }
+    
+    // Check if close to revenue target
+    const revenueProgress = (data.metrics.revenue.value / data.metrics.revenue.target) * 100
+    if (revenueProgress > 90) {
+      insights.push({
+        type: "opportunity",
+        title: "Revenue Target Within Reach",
+        description: `Only ${(100 - revenueProgress).toFixed(1)}% away from revenue target`,
+        impact: "Medium",
+        action: "Increase ad spend on top performers",
+      })
+    }
+    
+    // Check top performing campaign
+    const topCampaign = data.campaigns.reduce((prev, current) => 
+      (prev.roas > current.roas) ? prev : current
+    )
+    insights.push({
+      type: "success",
+      title: "Top Performer Identified",
+      description: `${topCampaign.name} has ${topCampaign.roas}x ROAS`,
       impact: "Medium",
-      action: "Reallocate budget",
-    },
-  ]
+      action: "Scale similar campaigns",
+    })
+    
+    return insights
+  }
+
+  const insights = generateInsights()
 
   return (
     <Card className="hover:shadow-lg transition-shadow duration-300">

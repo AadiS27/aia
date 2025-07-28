@@ -13,7 +13,7 @@ interface ReportCardProps {
     type: string
     lastGenerated: string
     status: string
-    metrics: any
+    metrics: Record<string, number | string | undefined>
   }
 }
 
@@ -50,7 +50,9 @@ export function ReportCard({ report }: ReportCardProps) {
 
         <div className="pt-2 border-t">
           <div className="grid grid-cols-2 gap-2 text-xs">
-            {Object.entries(report.metrics).map(([key, value]) => (
+            {Object.entries(report.metrics)
+              .filter(([, value]) => value !== undefined)
+              .map(([key, value]) => (
               <div key={key} className="space-y-1">
                 <div className="text-muted-foreground capitalize">{key.replace(/([A-Z])/g, " $1").trim()}</div>
                 <div className="font-medium">{typeof value === "number" ? value.toLocaleString() : value}</div>

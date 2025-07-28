@@ -41,12 +41,10 @@ export function InsightCard({ insight, priority }: InsightCardProps) {
     }
   }
 
-  const getImpactColor = () => {
+  const getImpactColor = (): "default" | "secondary" | "destructive" | "outline" => {
     switch (insight.impact) {
-      case "Critical":
-        return "destructive"
       case "High":
-        return "default"
+        return "destructive"
       case "Medium":
         return "secondary"
       case "Positive":
@@ -69,7 +67,7 @@ export function InsightCard({ insight, priority }: InsightCardProps) {
                   <div className="text-sm text-muted-foreground">{insight.description}</div>
                 </div>
                 <div className="flex items-center gap-2 ml-4">
-                  <Badge variant={getImpactColor() as any}>{insight.impact} Impact</Badge>
+                  <Badge variant={getImpactColor()}>{insight.impact} Impact</Badge>
                   <Badge variant="outline">{insight.category}</Badge>
                 </div>
               </div>

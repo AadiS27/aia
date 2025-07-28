@@ -135,6 +135,17 @@ export default function ReportsPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <Select value={selectedReport} onValueChange={setSelectedReport}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select report type" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="performance">Performance</SelectItem>
+                <SelectItem value="audience">Audience</SelectItem>
+                <SelectItem value="competitive">Competitive</SelectItem>
+                <SelectItem value="attribution">Attribution</SelectItem>
+              </SelectContent>
+            </Select>
             <Select value={dateRange} onValueChange={setDateRange}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select date range" />

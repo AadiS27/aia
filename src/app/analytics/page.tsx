@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { DashboardLayout } from "@/components/dashboard-layout"
 import { DateRangePicker } from "@/components/date-range-picker"
 import { AdvancedChart } from "@/components/advanced-chart"
@@ -16,6 +17,12 @@ import { TrendingUp, Users, MousePointer, Eye, Clock, Target, BarChart3, PieChar
 
 export default function AnalyticsPage() {
   const [selectedMetric, setSelectedMetric] = useState("revenue")
+
+  const handleMetricChange = (metric: string) => {
+    setSelectedMetric(metric)
+    // This would typically filter or update the analytics data
+    console.log("Selected metric:", metric)
+  }
 
   const analyticsData = {
     overview: {
@@ -74,6 +81,17 @@ export default function AnalyticsPage() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <Select value={selectedMetric} onValueChange={handleMetricChange}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Select metric" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="revenue">Revenue</SelectItem>
+                <SelectItem value="users">Users</SelectItem>
+                <SelectItem value="sessions">Sessions</SelectItem>
+                <SelectItem value="conversions">Conversions</SelectItem>
+              </SelectContent>
+            </Select>
             <DateRangePicker />
             <Button variant="outline" size="sm" className="hover:scale-105 transition-transform bg-transparent">
               <Activity className="h-4 w-4 mr-2" />
